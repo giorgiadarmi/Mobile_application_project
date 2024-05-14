@@ -1,0 +1,21 @@
+APP
+Accesso con login google
+
+menu --> profilo con foto (utilizzo fotocamera) possibilità di modificare il profilo
+		funzionalità extra riguardanti l'allenamento
+		lista amici e possibilità di aggiungere amici
+
+Home --> amici attivi e possibiltà di partecipare all'allenamento
+
+Allenamento con monitoraggio della posizione e temperatura, pressione e umidità in dettaglio
+
+Presenza mappe 
+
+
+STEPS:
+1) creazione e gestione db (orm o query, firebase) in cloud (dati raccolti dall'app e aggiunti)
+2) aggiunta login con google (cloud provider)
+3) aggiunta sensori per monitoraggio e misurazione
+4) utilizzo WEB API per contatto di un service provider esterno per aggiungere funzionalità all'app (ex: meteo)
+
+
