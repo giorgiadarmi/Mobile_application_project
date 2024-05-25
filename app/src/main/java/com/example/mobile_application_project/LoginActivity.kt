@@ -1,12 +1,9 @@
-package com.example.mobile_application_project.ui.login
+package com.example.mobile_application_project
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mobile_application_project.MainActivity
-import com.example.mobile_application_project.R
-import com.example.mobile_application_project.SignUpActivity
 import com.example.mobile_application_project.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -42,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
 
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, HomeActivity::class.java)
                         startActivity(intent)
                     } else {
                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
@@ -97,24 +94,24 @@ class LoginActivity : AppCompatActivity() {
         val credential= GoogleAuthProvider.getCredential(account.idToken,null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener {task->
             if(task.isSuccessful) {
-                //account.email.toString() <--- the user's email
-                //account.displayName.toString()) <--- the user's name
-                val intent = Intent(this, MainActivity::class.java)
+                account.email.toString()
+                account.displayName.toString()
+                val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
                 finish()
+            }else{
+                Toast.makeText(this,task.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
-
     override fun onStart() {
         super.onStart()
         if(firebaseAuth.currentUser != null){
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
-        }
-        else if(GoogleSignIn.getLastSignedInAccount(this)!=null){
-            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
     }
+
+
 }

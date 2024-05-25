@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 	android:background="@drawable/signin_screen"
-    tools:context=".ui.login.LoginActivity">
+    tools:context=".LoginActivity">
 
 	<com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailLayout"
@@ -81,17 +81,18 @@
 		app:layout_constraintHorizontal_bias="0.497"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/button"
-		app:layout_constraintVertical_bias="0.653" />
+		app:layout_constraintVertical_bias="0.836" />
 
 	<com.google.android.gms.common.SignInButton
 		android:id="@+id/sign_in"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="580dp"
+		android:layout_marginTop="604dp"
 		android:text="Mobile App Project"
+		app:icon="@drawable/googlelogo"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.468"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,27 +6,27 @@
 	android:layout_height="match_parent"
 	tools:context=".MainActivity">
 
+
+	<ImageView
+		android:id="@+id/imageView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="10"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:srcCompat="@drawable/logo_app" />
+
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Hello World!"
+		android:text="Welcome in the fitness app!"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.853" />
 
-	<androidx.appcompat.widget.AppCompatButton
-		android:id="@+id/logout"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginHorizontal="16dp"
-		android:layout_marginBottom="32dp"
-		android:background="@color/yellow"
-		android:text="logout"
-		android:textColor="@color/black"
-		android:textStyle="bold"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

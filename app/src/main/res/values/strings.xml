@@ -12,8 +12,8 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in_short">Sing In Short</string>
     <string name="action_sign_in">Sing In</string>
-	<string name="sign_out">Sing Out</string>
-	<string name="disconnect">Disconnect</string>
+    <string name="sign_out">Sing Out</string>
+    <string name="disconnect">Disconnect</string>
     <string name="login_failed">Failed Login</string>
     <string name="invalid_username">Invalid username</string>
     <string name="invalid_password">Invalid password</string>
