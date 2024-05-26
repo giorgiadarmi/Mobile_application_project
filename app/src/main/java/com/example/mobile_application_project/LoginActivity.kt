@@ -2,6 +2,7 @@ package com.example.mobile_application_project
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mobile_application_project.databinding.ActivityLoginBinding
@@ -84,6 +85,18 @@ class LoginActivity : AppCompatActivity() {
             val account: GoogleSignInAccount? =completedTask.getResult(ApiException::class.java)
             if (account != null) {
                 updateUI(account)
+                val googleId = account?.id ?: ""
+                Log.i("Google ID",googleId)
+                val googleFirstName = account?.givenName ?: ""
+                Log.i("Google First Name", googleFirstName)
+                val googleLastName = account?.familyName ?: ""
+                Log.i("Google Last Name", googleLastName)
+                val googleEmail = account?.email ?: ""
+                Log.i("Google Email", googleEmail)
+                val googleProfilePicURL = account?.photoUrl.toString()
+                Log.i("Google Profile Pic URL", googleProfilePicURL)
+                val googleIdToken = account?.idToken ?: ""
+                Log.i("Google ID Token", googleIdToken)
             }
         } catch (e: ApiException){
             Toast.makeText(this,e.toString(), Toast.LENGTH_SHORT).show()
@@ -98,7 +111,6 @@ class LoginActivity : AppCompatActivity() {
                 account.displayName.toString()
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
-                finish()
             }else{
                 Toast.makeText(this,task.toString(), Toast.LENGTH_SHORT).show()
             }
@@ -109,7 +121,6 @@ class LoginActivity : AppCompatActivity() {
         if(firebaseAuth.currentUser != null){
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
 

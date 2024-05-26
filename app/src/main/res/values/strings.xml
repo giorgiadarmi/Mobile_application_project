@@ -17,4 +17,6 @@
     <string name="login_failed">Failed Login</string>
     <string name="invalid_username">Invalid username</string>
     <string name="invalid_password">Invalid password</string>
+	<string name="open">Open Navigation Drawer</string>
+    <string name="close">Close Navigation Drawer</string>
 </resources>

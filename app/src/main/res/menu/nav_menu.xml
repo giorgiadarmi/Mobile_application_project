@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/Profile"
+        android:title="Profile" />
+    <item
+        android:id="@+id/Activity"
+        android:title="Activity" />
+    <item
+        android:id="@+id/Teams"
+        android:title="Teams" />
+	<item
+        android:id="@+id/Maps"
+        android:title="Maps" />
+	<item
+        android:id="@+id/Settings"
+        android:title="Settings" />
+		
+</menu>
