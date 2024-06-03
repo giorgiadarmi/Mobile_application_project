@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "887944600673",
     "project_id": "mobile-app-uni-project",
+	"firebase_url": "https://mobile-app-uni-project-default-rtdb.europe-west1.firebasedatabase.app/",
     "storage_bucket": "mobile-app-uni-project.appspot.com"
   },
   "client": [

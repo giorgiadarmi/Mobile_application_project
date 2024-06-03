@@ -17,6 +17,58 @@
     <string name="login_failed">Failed Login</string>
     <string name="invalid_username">Invalid username</string>
     <string name="invalid_password">Invalid password</string>
-	<string name="open">Open Navigation Drawer</string>
+    <string name="open">Open Navigation Drawer</string>
     <string name="close">Close Navigation Drawer</string>
+    <string name="profile_photo">Profile Photo:</string>
+    <string name="change">CHANGE</string>
+    <string name="name"> Name:</string>
+    <string name="your_name">Your Name</string>
+	<string name="last_name">Last Name:</string>
+    <string name="your_last_name">Your Last Name</string>
+	<string name="email">Email:</string>
+    <string name="your_email">Your Email</string>
+    <string name="gender">Gender:</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="age">Age:</string>
+    <string name="eg_25">eg. 25</string>
+    <string name="username">Username:</string>
+    <string name="your_username">Your username</string>
+    <string name="save">save</string>
+    <string name="cancel">cancel</string>
+    <string name="settings">settings</string>
+    <string name="settings_preference_key">SETTINGS_PREFERENCE_KEY</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="this_is_start">this is start</string>
+    <string name="this_is_settings">this is settings</string>
+    <string name="this_is_history">this is history</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Account Preferences</string>
+    <string name="add_header">Additional Settings</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="input_type">Input Type</string>
+    <string name="activity_type">Activity Type</string>
+    <string name="start">Start</string>
+    <string name="how_did_it_go_notes_he">How did it go? Notes he</string>
+    <string name="date_and_time">Date and time</string>
+    <string name="duration">Duration</string>
+    <string name="distance">Distance</string>
+    <string name="calories">Calories</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="delete">delete</string>
+    <string name="back">back</string>
+    <string name="location">location</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="map_loading">map loading...</string>
 </resources>

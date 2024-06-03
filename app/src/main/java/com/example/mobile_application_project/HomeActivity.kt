@@ -41,6 +41,8 @@ class HomeActivity : AppCompatActivity() {
                 when (it.itemId) {
                     R.id.Profile -> {
                         Toast.makeText(this@HomeActivity, "Profile Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
+                        startActivity(intent)
                     }
                     R.id.Activity -> {
                         Toast.makeText(this@HomeActivity, "Activity Item Clicked", Toast.LENGTH_SHORT).show()
