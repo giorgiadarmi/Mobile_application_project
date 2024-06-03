@@ -43,7 +43,23 @@
                 android:text="@string/change"
                 tools:ignore="UsingOnClickInXml" />
         </LinearLayout>
+		<LinearLayout
+            android:layout_width="354dp"
+            android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_corner_orange"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Name: "
+                android:textSize="16sp"
+                android:textStyle="bold" />
         <TextView
             android:id="@+id/name"
 			android:layout_width="wrap_content"
@@ -54,14 +70,33 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
+		</LinearLayout>
         <EditText
             android:id="@+id/edit_message_name"
+			android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/your_name" />
+            android:hint="@string/change_name" />
 		
+		<LinearLayout
+            android:layout_width="354dp"
+            android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_corner_orange"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Email: "
+                android:textSize="16sp"
+                android:textStyle="bold" />
+				
         <TextView
 			android:id="@+id/email"
             android:layout_width="wrap_content"
@@ -72,49 +107,93 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-	
+		</LinearLayout>
 
         <EditText
             android:id="@+id/edit_message_email"
+			android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/your_email" />
+            android:hint="@string/change_email" />
 
-
-        <TextView
-			android:id="@+id/age"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="354dp"
             android:layout_height="wrap_content"
-            android:text="@string/age"
-            android:textSize="21sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_corner_orange"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Age: "
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="age"
+                android:textSize="21sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/edit_message_age"
+			android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/eg_25" />
-	
+            android:hint="@string/change_age" />
 
-        <TextView
-			android:id="@+id/username"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="354dp"
             android:layout_height="wrap_content"
-            android:text="@string/username"
-            android:textSize="21sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+			android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_corner_orange"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Username: "
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="username"
+                android:textSize="21sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/edit_message_username"
-            android:layout_width="wrap_content"
+			android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="244dp"
             android:layout_height="wrap_content"
-            android:hint="@string/your_username" />
+            android:hint="@string/change_username" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -123,18 +202,24 @@
 
             <Button
                 android:id="@+id/save_btn"
-                android:layout_width="104dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/save"
+                android:background="@drawable/rounded_corner_orange"
                 android:onClick="onSaveButtonClicked"
+                android:text="@string/save"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 tools:ignore="UsingOnClickInXml" />
 
             <Button
                 android:id="@+id/cancel_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel"
+                android:background="@drawable/rounded_corner_orange"
+				android:textColor="@color/black"
+				android:textStyle="bold"
                 android:onClick="onCancelButtonClicked"
+                android:text="@string/cancel"
                 tools:ignore="UsingOnClickInXml" />
 
         </LinearLayout>

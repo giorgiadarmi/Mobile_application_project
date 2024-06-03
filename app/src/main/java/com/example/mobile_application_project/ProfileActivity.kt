@@ -15,7 +15,6 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -123,20 +122,40 @@ override fun onCreate(savedInstanceState: Bundle?) {
         }
         val sp: SharedPreferences = getSharedPreferences("User", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sp.edit()
+        val name = binding.editMessageName.text.toString()
+        val email = binding.editMessageEmail.text.toString()
+        val age = binding.editMessageAge.text.toString()
+        val username = binding.editMessageUsername.text.toString()
 
-        val first_name: EditText = findViewById(R.id.edit_message_name)
-        editor.putString("Name", first_name.text.toString().trim())
-        val email: EditText = findViewById(R.id.edit_message_email)
-        editor.putString("Email", email.text.toString().trim())
-        val ageNum: EditText = findViewById(R.id.edit_message_age)
-        editor.putString("ClassNum", ageNum.text.toString().trim())
-        val username: EditText = findViewById(R.id.edit_message_username)
-        editor.putString("Username", username.text.toString().trim())
+        updateData(name,email,age,username)
 
         editor.apply()
         Toast.makeText(applicationContext, "saved", Toast.LENGTH_SHORT).show()
         finish()
     }
+
+    private fun updateData(name: String, email: String, age: String, username: String,) {
+        database = FirebaseDatabase.getInstance().getReference("Users")
+        val User = mapOf<String,String>(
+            "name" to name,
+            "email" to email,
+            "age" to age,
+            "username" to username
+        )
+        val UID = FirebaseAuth.getInstance().getCurrentUser()?.getUid()
+        database.child(UID.toString()).updateChildren(User).addOnSuccessListener {
+            binding.editMessageName.text!!.clear()
+            binding.editMessageEmail.text!!.clear()
+            binding.editMessageAge.text!!.clear()
+            binding.editMessageUsername.text!!.clear()
+            Toast.makeText(this,"Successfuly Updated",Toast.LENGTH_SHORT).show()
+
+
+        }.addOnFailureListener{
+
+            Toast.makeText(this,"Failed to Update",Toast.LENGTH_SHORT).show()
+
+        }}
 
     fun onCancelButtonClicked(view: View) {
         onLoad(view)
