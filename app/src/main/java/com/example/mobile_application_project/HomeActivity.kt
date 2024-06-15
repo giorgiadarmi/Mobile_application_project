@@ -20,7 +20,9 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         firebaseAuth = FirebaseAuth.getInstance()
+
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -39,19 +41,28 @@ class HomeActivity : AppCompatActivity() {
 
             navView.setNavigationItemSelectedListener {
                 when (it.itemId) {
+                    R.id.Home -> {
+                        Toast.makeText(this@HomeActivity, "Home Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, HomeActivity::class.java)
+                        startActivity(intent)
+                    }
                     R.id.Profile -> {
                         Toast.makeText(this@HomeActivity, "Profile Item Clicked", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@HomeActivity, ProfileActivity::class.java)
                         startActivity(intent)
                     }
-                    R.id.Activity -> {
-                        Toast.makeText(this@HomeActivity, "Activity Item Clicked", Toast.LENGTH_SHORT).show()
+                    R.id.Training -> {
+                        Toast.makeText(this@HomeActivity, "Training Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, TrainingActivity::class.java)
+                        startActivity(intent)
                     }
                     R.id.Teams -> {
                         Toast.makeText(this@HomeActivity, "Teams Item Clicked", Toast.LENGTH_SHORT).show()
                     }
                     R.id.Maps -> {
                         Toast.makeText(this@HomeActivity, "Maps Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, TrackingActivity::class.java)
+                        startActivity(intent)
                     }
                     R.id.Settings -> {
                         Toast.makeText(this@HomeActivity, "Settings Item Clicked", Toast.LENGTH_SHORT).show()

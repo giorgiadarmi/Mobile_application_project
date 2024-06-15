@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
+     <item
+        android:id="@+id/Home"
+        android:title="Home" />
+	<item
         android:id="@+id/Profile"
         android:title="Profile" />
     <item
-        android:id="@+id/Activity"
-        android:title="Activity" />
+        android:id="@+id/Training"
+        android:title="Training" />
     <item
         android:id="@+id/Teams"
         android:title="Teams" />
