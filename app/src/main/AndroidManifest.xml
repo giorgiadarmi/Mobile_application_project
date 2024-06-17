@@ -25,6 +25,9 @@
         android:theme="@style/Theme.Mobile_application_project"
         tools:targetApi="31">
         <activity
+            android:name=".WeatherActivity"
+            android:exported="false" />
+        <activity
             android:name=".TrainingActivity"
             android:exported="false" />
         <!--

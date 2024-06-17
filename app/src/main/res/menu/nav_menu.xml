@@ -6,6 +6,9 @@
 	<item
         android:id="@+id/Profile"
         android:title="Profile" />
+	<item
+        android:id="@+id/Weather"
+        android:title="Weather" />
     <item
         android:id="@+id/Training"
         android:title="Training" />
@@ -18,5 +21,6 @@
 	<item
         android:id="@+id/Settings"
         android:title="Settings" />
+		
 		
 </menu>
