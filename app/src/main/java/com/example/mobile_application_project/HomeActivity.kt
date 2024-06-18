@@ -61,6 +61,11 @@ class HomeActivity : AppCompatActivity() {
                         val intent = Intent(this@HomeActivity, TrainingActivity::class.java)
                         startActivity(intent)
                     }
+                    R.id.Maps -> {
+                        Toast.makeText(this@HomeActivity, "Maps Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, TrackingActivity::class.java)
+                        startActivity(intent)
+                    }
                     R.id.Teams -> {
                         Toast.makeText(this@HomeActivity, "Teams Item Clicked", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@HomeActivity, FriendsActivity::class.java)
@@ -71,27 +76,15 @@ class HomeActivity : AppCompatActivity() {
                         val intent = Intent(this@HomeActivity, MessageActivity::class.java)
                         startActivity(intent)
                     }
-                    R.id.Maps -> {
-                        Toast.makeText(this@HomeActivity, "Maps Item Clicked", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@HomeActivity, TrackingActivity::class.java)
-                        startActivity(intent)
-                    }
                     R.id.Settings -> {
                         Toast.makeText(this@HomeActivity, "Settings Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, SettingsActivity::class.java)
+                        startActivity(intent)
                     }
                 }
                 true
             }
 
-        }
-
-
-        binding.signOutBtn.setOnClickListener {
-            firebaseAuth.signOut()
-            mGoogleSignInClient.signOut()
-            val logoutIntent = Intent(this, LoginActivity::class.java)
-            startActivity(logoutIntent)
-            finish()
         }
     }
 }
