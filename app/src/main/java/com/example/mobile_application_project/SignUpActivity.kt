@@ -44,7 +44,6 @@ class SignUpActivity : AppCompatActivity() {
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
                             val UID = FirebaseAuth.getInstance().getCurrentUser()?.getUid()
-                            Log.d("qui", UID.toString())
                             database = FirebaseDatabase.getInstance().getReference("Users")
                             val User = User(name,email,age,username)
                             database.child(UID.toString()).setValue(User).addOnCompleteListener {

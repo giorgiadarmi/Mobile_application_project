@@ -63,6 +63,13 @@ class HomeActivity : AppCompatActivity() {
                     }
                     R.id.Teams -> {
                         Toast.makeText(this@HomeActivity, "Teams Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, FriendsActivity::class.java)
+                        startActivity(intent)
+                    }
+                    R.id.Messages -> {
+                        Toast.makeText(this@HomeActivity, "Messages Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, MessageActivity::class.java)
+                        startActivity(intent)
                     }
                     R.id.Maps -> {
                         Toast.makeText(this@HomeActivity, "Maps Item Clicked", Toast.LENGTH_SHORT).show()

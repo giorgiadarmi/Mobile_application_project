@@ -15,6 +15,9 @@
     <item
         android:id="@+id/Teams"
         android:title="Teams" />
+	    <item
+        android:id="@+id/Messages"
+        android:title="Messages" />
 	<item
         android:id="@+id/Maps"
         android:title="Maps" />
