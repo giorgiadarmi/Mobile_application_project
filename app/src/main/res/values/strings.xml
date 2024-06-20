@@ -24,6 +24,8 @@
     <string name="name"> Name: </string>
     <string name="your_name">Your Name</string>
     <string name="change_name">Type changed name</string>
+    <string name="surname"> Surname: </string>
+    <string name="change_surname">Type changed surname</string>
     <string name="email">Email: </string>
     <string name="your_email">Your Email</string>
     <string name="change_email">Type changed email</string>

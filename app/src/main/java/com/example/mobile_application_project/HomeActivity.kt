@@ -56,6 +56,11 @@ class HomeActivity : AppCompatActivity() {
                         val intent = Intent(this@HomeActivity, WeatherActivity::class.java)
                         startActivity(intent)
                     }
+                    R.id.Session -> {
+                        Toast.makeText(this@HomeActivity, "Session Item Clicked", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@HomeActivity, SessionActivity::class.java)
+                        startActivity(intent)
+                    }
                     R.id.Training -> {
                         Toast.makeText(this@HomeActivity, "Training Item Clicked", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@HomeActivity, TrainingActivity::class.java)

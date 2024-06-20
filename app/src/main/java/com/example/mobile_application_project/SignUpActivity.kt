@@ -30,6 +30,7 @@ class SignUpActivity : AppCompatActivity() {
 
         binding.button.setOnClickListener {
             val name = binding.nameEt.text.toString()
+            val surname = binding.surnameEt.text.toString()
             val username = binding.usernameEt.text.toString()
             val age = binding.ageEt.text.toString()
             val email = binding.emailEt.text.toString()
@@ -45,9 +46,10 @@ class SignUpActivity : AppCompatActivity() {
                         if (it.isSuccessful) {
                             val UID = FirebaseAuth.getInstance().getCurrentUser()?.getUid()
                             database = FirebaseDatabase.getInstance().getReference("Users")
-                            val User = User(name,email,age,username)
+                            val User = User(name,surname,email,age,username)
                             database.child(UID.toString()).setValue(User).addOnCompleteListener {
                                 binding.nameEt.text!!.clear()
+                                binding.surnameEt.text!!.clear()
                                 binding.emailEt.text!!.clear()
                                 binding.ageEt.text!!.clear()
                                 binding.usernameEt.text!!.clear()

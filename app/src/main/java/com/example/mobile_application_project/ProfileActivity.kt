@@ -118,29 +118,32 @@ class ProfileActivity : AppCompatActivity() {
         val sp: SharedPreferences = getSharedPreferences("User", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sp.edit()
         val name = binding.editMessageName.text.toString()
+        val surname = binding.editMessageSurname.text.toString()
         val email = binding.editMessageEmail.text.toString()
         val age = binding.editMessageAge.text.toString()
         val username = binding.editMessageUsername.text.toString()
 
-        updateData(name, email, age, username)
+        updateData(name, surname, email, age, username)
 
         editor.apply()
         Toast.makeText(applicationContext, "Saved", Toast.LENGTH_SHORT).show()
         finish()
     }
 
-    private fun updateData(name: String, email: String, age: String, username: String) {
+    private fun updateData(name: String, surname: String, email: String, age: String, username: String) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         if (uid != null) {
             database = FirebaseDatabase.getInstance().getReference("Users")
             val user = mapOf(
                 "name" to name,
+                "surname" to surname,
                 "email" to email,
                 "age" to age,
                 "username" to username
             )
             database.child(uid).updateChildren(user).addOnSuccessListener {
                 binding.editMessageName.text!!.clear()
+                binding.editMessageSurname.text!!.clear()
                 binding.editMessageEmail.text!!.clear()
                 binding.editMessageAge.text!!.clear()
                 binding.editMessageUsername.text!!.clear()
@@ -175,6 +178,7 @@ class ProfileActivity : AppCompatActivity() {
         database.child(uid).get().addOnSuccessListener {
             if (it.exists()) {
                 val name = it.child("name").value.toString()
+                val surname = it.child("surname").value.toString()
                 val email = it.child("email").value.toString()
                 val age = it.child("age").value.toString()
                 val username = it.child("username").value.toString()
@@ -182,6 +186,7 @@ class ProfileActivity : AppCompatActivity() {
 
                 Toast.makeText(this, "Successfully Read", Toast.LENGTH_SHORT).show()
                 binding.name.text = name
+                binding.surname.text = surname
                 binding.email.text = email
                 binding.age.text = age
                 binding.username.text = username
