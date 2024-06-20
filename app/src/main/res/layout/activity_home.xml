@@ -6,25 +6,136 @@
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
     tools:context=".HomeActivity">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-	  
-	
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Activity body"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.57"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.339" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <!-- Header Section -->
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="?attr/colorPrimary">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="71dp"
+                android:layout_height="88dp"
+                android:contentDescription="@string/logo"
+                android:src="@drawable/logo_app" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:textColor="@android:color/white"
+                android:text="Welcome in fitness app" />
+
+        </LinearLayout>
+
+        <!-- Weather Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/weather_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header"
+            android:layout_margin="16dp"
+            android:elevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/weather_icon"
+                    android:layout_width="63dp"
+                    android:layout_height="55dp"
+                    android:contentDescription="@string/weather"
+                    android:src="@drawable/ic_weather" />
+
+                <TextView
+                    android:id="@+id/weather_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:text="Check the weather" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Quick Actions -->
+         <androidx.cardview.widget.CardView
+            android:id="@+id/workout_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/weather_card"
+            android:layout_margin="16dp"
+            android:elevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/workout_icon"
+                    android:layout_width="63dp"
+                    android:layout_height="55dp"
+                    android:contentDescription="@string/workout"
+                    android:src="@drawable/ic_workout" />
+
+                <TextView
+                    android:id="@+id/start_workout_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:text="Start new workout" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Recent Workouts and Notifications -->
+        <TextView
+            android:id="@+id/recent_activities_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/workout_card"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Recent Activities" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recent_activities_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recent_activities_title"
+            android:layout_margin="16dp"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:id="@+id/notifications_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recent_activities_recycler_view"
+            android:layout_marginStart="16dp"
+            android:text="Notifications" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notifications_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notifications_title"
+            android:layout_margin="16dp"
+            android:scrollbars="vertical" />
+    </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
@@ -34,7 +145,4 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu" />
-		
-
-
 </androidx.drawerlayout.widget.DrawerLayout>

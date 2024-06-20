@@ -32,6 +32,17 @@ class HomeActivity : AppCompatActivity() {
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.weatherInfo?.setOnClickListener {
+            val intent = Intent(this, WeatherActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.startWorkoutButton?.setOnClickListener {
+            val intent = Intent(this, SessionActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.apply {
             toggle = ActionBarDrawerToggle(this@HomeActivity, drawerLayout, R.string.open, R.string.close)
             drawerLayout.addDrawerListener(toggle)
@@ -92,4 +103,6 @@ class HomeActivity : AppCompatActivity() {
 
         }
     }
+
+
 }
