@@ -4,64 +4,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/home_background"
     tools:context=".SettingsActivity">
+		
+	<ImageView
+		android:id="@+id/setting"
+		android:padding="6dp"
+		android:layout_width="71dp"
+		android:layout_height="88dp"
+		android:src="@drawable/ic_settings"
+		tools:ignore="MissingConstraints" />
 
-    <!-- Change password button -->
-    <Button
+	<TextView
+		android:id="@+id/header"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:padding="16dp"
+		android:text="Settings"
+		android:textColor="@android:color/white"
+		android:textSize="24sp"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="1.0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<com.google.android.material.button.MaterialButton
         android:id="@+id/changePasswordBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:iconTint="?attr/colorPrimary"
         android:text="Change Password"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
     <!-- Forgot password button -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/forgotPasswordBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:iconTint="?attr/colorPrimary"
         android:text="Forgot Password"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/changePasswordBtn"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/changePasswordBtn" />
 
     <!-- Theme switch -->
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/darkModeSwitch"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-         android:text="Dark Mode"
+        android:layout_margin="16dp"
+        android:checked="false"
+        android:text="Dark Mode"
+        android:textColor="?attr/colorPrimary"
         android:textOff="Light"
         android:textOn="Dark"
-        android:checked="false"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/forgotPasswordBtn"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/forgotPasswordBtn" />
 
     <!-- Delete account button -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/deleteAccountBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="?attr/colorError"
+        android:iconTint="?attr/colorError"
         android:text="Delete Account"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/darkModeSwitch"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/darkModeSwitch" />
 
     <!-- Sign out button -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/signOutBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:iconTint="?attr/colorPrimary"
         android:text="Sign Out"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deleteAccountBtn"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/deleteAccountBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

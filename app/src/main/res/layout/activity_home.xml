@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+	android:background="@drawable/home_background"
     android:id="@+id/drawerLayout"
     tools:context=".HomeActivity">
 
@@ -18,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp"
-            android:background="?attr/colorPrimary">
+            android:background="@color/orange">
 
             <ImageView
                 android:id="@+id/logo"
