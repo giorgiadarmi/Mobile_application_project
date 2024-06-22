@@ -1,89 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".SessionActivity">
 
+    <!-- Spinner per selezionare il tipo di sessione -->
     <Spinner
         android:id="@+id/session_type_spinner"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
 
+    <!-- Pulsante di avvio sessione -->
     <Button
         android:id="@+id/start_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
-        android:layout_margin="16dp" />
+        android:layout_below="@id/session_type_spinner"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:text="Start" />
 
-    <TextView
-        android:id="@+id/session_info"
-        android:layout_width="match_parent"
+    <!-- Pulsante di stop sessione -->
+    <Button
+        android:id="@+id/stop_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_below="@id/start_button"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:text="Stop"
         android:visibility="gone" />
 
+    <!-- Mappa -->
     <com.google.android.gms.maps.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="250dp"
+        android:layout_below="@id/stop_button"
+        android:layout_marginTop="16dp" />
 
-    <LinearLayout
+    <!-- ScrollView per le informazioni della sessione e dei sensori -->
+    <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="gone"
-        android:id="@+id/sensor_info_layout">
+        android:layout_below="@id/map_view"
+        android:layout_marginTop="16dp"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/temperature_value"
+        <!-- Layout per contenere tutte le informazioni -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Temperature: --" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/humidity_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Humidity: --" />
+            <!-- Informazioni della sessione -->
+            <TextView
+                android:id="@+id/session_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Session Information"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/pressure_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pressure: --" />
+            <!-- Layout per le informazioni dei sensori -->
+            <LinearLayout
+                android:id="@+id/sensor_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-        <TextView
-            android:id="@+id/latitude_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Latitude: --" />
+                <TextView
+                    android:id="@+id/temperature_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Temperature: --" />
 
-        <TextView
-            android:id="@+id/longitude_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Longitude: --" />
+                <TextView
+                    android:id="@+id/humidity_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Humidity: --" />
 
-        <TextView
-            android:id="@+id/date_of_measurement_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Date of Measurement: --" />
+                <TextView
+                    android:id="@+id/pressure_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pressure: --" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/latitude_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Latitude: --" />
 
-    <Button
-        android:id="@+id/stop_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:layout_margin="16dp"
-        android:visibility="gone" />
+                <TextView
+                    android:id="@+id/longitude_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Longitude: --" />
 
-</LinearLayout>
+                <TextView
+                    android:id="@+id/date_of_measurement_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date of Measurement: --" />
+
+                <!-- Aggiunte per il conteggio dei passi, distanza totale e velocità media -->
+                <TextView
+                    android:id="@+id/number_of_step_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number of steps: --" />
+
+                <TextView
+                    android:id="@+id/total_distance_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total distance: -- meters" />
+
+                <TextView
+                    android:id="@+id/average_pace_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Average pace: -- km/h" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

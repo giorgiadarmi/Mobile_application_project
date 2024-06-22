@@ -19,6 +19,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.mobile_application_project.ui.EnvironmentData
+import com.example.mobile_application_project.ui.Session
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -31,14 +33,18 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import org.json.JSONObject
 import java.net.URL
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
 class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListener {
-
+    private lateinit var database: DatabaseReference
     private lateinit var sessionTypeSpinner: Spinner
     private lateinit var startButton: Button
     private lateinit var stopButton: Button
@@ -53,11 +59,17 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     private lateinit var latitudeValue: TextView
     private lateinit var longitudeValue: TextView
     private lateinit var dateOfMeasurementValue: TextView
+    private lateinit var numberOfStepTextView: TextView
+    private lateinit var totalDistanceTextView: TextView
+    private lateinit var averagePaceTextView: TextView
 
     private var temperature: String = "--"
     private var humidity: String = "--"
     private var pressure: String = "--"
-
+    private var stepCount = 0
+    private var totalDistance = 0.0
+    private var startTime: Long = 0
+    private lateinit var lastLocation: Location
 
     private var sessionId = 0
     private lateinit var sessionStartDate: String
@@ -80,7 +92,7 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_session)
-
+        database = FirebaseDatabase.getInstance().reference
         sessionTypeSpinner = findViewById(R.id.session_type_spinner)
         startButton = findViewById(R.id.start_button)
         stopButton = findViewById(R.id.stop_button)
@@ -94,6 +106,9 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         latitudeValue = findViewById(R.id.latitude_value)
         longitudeValue = findViewById(R.id.longitude_value)
         dateOfMeasurementValue = findViewById(R.id.date_of_measurement_value)
+        numberOfStepTextView = findViewById(R.id.number_of_step_value)
+        totalDistanceTextView = findViewById(R.id.total_distance_value)
+        averagePaceTextView = findViewById(R.id.average_pace_value)
 
         temperatureValue.text = "Temperature: --"
         humidityValue.text = "Humidity: --"
@@ -101,6 +116,9 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         latitudeValue.text = "Latitude: --"
         longitudeValue.text = "Longitude: --"
         dateOfMeasurementValue.text = "Date of Measurement: --"
+        numberOfStepTextView.text = "Number of steps: --"
+        totalDistanceTextView.text = "Total distance: -- meters"
+        averagePaceTextView.text = "Average pace: -- km/h"
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -123,8 +141,11 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
-                    updateLocationOnMap(location)
-                    updateSensorInfo(location)
+                    if (isSessionActive) {
+                        updateLocationOnMap(location)
+                        updateSensorInfo(location)
+                        updateTrackingInfo(location)
+                    }
                 }
             }
         }
@@ -146,13 +167,16 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         sessionId++
         sessionStartDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
         isSessionActive = true
+        stepCount = 0
+        totalDistance = 0.0
+        startTime = System.currentTimeMillis()
 
         val selectedSessionType = sessionTypeSpinner.selectedItem.toString()
         sessionInfo.text = """
             ID: $sessionId
             Name: ${selectedSessionType}
             Date of Creation: $sessionStartDate
-            Date of End: $sessionStartDate
+            Date of End:
             Active: Yes
             Creator ID: 1
             Creator: User
@@ -172,11 +196,65 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         isSessionActive = false
 
         val sessionInfoText = sessionInfo.text.toString().replace("Active: Yes", "Active: No")
-        sessionInfo.text = sessionInfoText.replace("Date of End: $sessionStartDate", "Date of End: $sessionEndDate")
+        sessionInfo.text = sessionInfoText.replace("Date of End:", "Date of End: $sessionEndDate")
         startButton.visibility = View.VISIBLE
         stopButton.visibility = View.GONE
         stopLocationUpdates()
         stopSensorUpdates()
+        FetchWeatherTask().execute()
+
+        val temperature = temperatureValue.text.toString().removePrefix("Temperature: ").removeSuffix("°C")
+        val humidity = humidityValue.text.toString().removePrefix("Humidity: ").removeSuffix("%")
+        val pressure = pressureValue.text.toString().removePrefix("Pressure: ").removeSuffix("hPa")
+
+        val elapsedTime = (System.currentTimeMillis() - startTime) / 1000.0
+        val distanceInKm = totalDistance / 1000.0
+        val averagePace = if (elapsedTime > 0) distanceInKm / (elapsedTime / 3600) else 0.0
+
+        val formattedPace = DecimalFormat("0.00").format(averagePace)
+        averagePaceTextView.text = "Average pace: $formattedPace km/h"
+
+        Log.d("SensorData", "Temperature: $temperature, Humidity: $humidity, Pressure: $pressure")
+        val environmentDataList = mutableListOf<EnvironmentData>()
+        environmentDataList.add(
+            EnvironmentData(
+                temperature = temperature,
+                humidity = humidity,
+                pressure = pressure,
+                latitude = lastLocation.latitude,
+                longitude = lastLocation.longitude,
+                date_of_measurement = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+            )
+        )
+
+        val session = Session(
+            name = sessionTypeSpinner.selectedItem.toString(),
+            date_of_creation = sessionStartDate,
+            date_of_end = sessionEndDate,
+            active = false,
+            creator_id = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+            creator = FirebaseAuth.getInstance().currentUser?.displayName ?: "User",
+            avgSpeed = averagePace,
+            number_of_step = stepCount,
+            totalDistance = totalDistance,
+            environment_data = environmentDataList,
+            session_type = sessionTypeSpinner.selectedItem.toString(),
+            session_type_id = sessionTypeSpinner.selectedItemPosition + 1
+        )
+
+        sendSessionData(session)
+    }
+
+    private fun sendSessionData(session: Session) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        database.child("Sessions").child(userId).push().setValue(session)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("SessionActivity", "Session saved successfully")
+                } else {
+                    Log.e("SessionActivity", "Failed to save session", task.exception)
+                }
+            }
     }
 
     private fun startLocationUpdates() {
@@ -210,10 +288,101 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     }
 
     private fun updateLocationOnMap(location: Location) {
-        val latLng = LatLng(location.latitude, location.longitude)
-        googleMap.clear()
-        googleMap.addMarker(MarkerOptions().position(latLng).title("Current Location"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        val currentLatLng = LatLng(location.latitude, location.longitude)
+        googleMap.addMarker(MarkerOptions().position(currentLatLng).title("Current Location"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng))
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f))
+
+        if (this::lastLocation.isInitialized) {
+            val lastLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+            googleMap.addPolyline(
+                PolylineOptions()
+                    .add(lastLatLng, currentLatLng)
+                    .width(5f)
+                    .color(ContextCompat.getColor(this, R.color.purple_700))
+            )
+
+            val distance = lastLocation.distanceTo(location)
+            totalDistance += distance
+            totalDistanceTextView.text = "Total distance: ${DecimalFormat("0.00").format(totalDistance)} meters"
+
+            val stepsTaken = (distance / 0.80).toInt()
+            stepCount += stepsTaken
+            numberOfStepTextView.text = "Number of steps: $stepCount"
+        }
+
+        lastLocation = location
+    }
+
+    private fun updateSensorInfo(location: Location) {
+        latitudeValue.text = "Latitude: ${location.latitude}"
+        longitudeValue.text = "Longitude: ${location.longitude}"
+        dateOfMeasurementValue.text = "Date of Measurement: ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())}"
+    }
+
+    private fun updateTrackingInfo(location: Location) {
+        val elapsedTime = (System.currentTimeMillis() - startTime) / 1000.0
+        val distanceInKm = totalDistance / 1000.0
+        val averagePace = if (elapsedTime > 0) distanceInKm / (elapsedTime / 3600) else 0.0
+
+        val formattedPace = DecimalFormat("0.00").format(averagePace)
+        averagePaceTextView.text = "Average pace: $formattedPace km/h"
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        event?.let {
+            when (it.sensor.type) {
+                Sensor.TYPE_AMBIENT_TEMPERATURE -> {
+                    temperature = "${it.values[0]}°C"
+                    temperatureValue.text = "Temperature: $temperature"
+                }
+                Sensor.TYPE_RELATIVE_HUMIDITY -> {
+                    humidity = "${it.values[0]}%"
+                    humidityValue.text = "Humidity: $humidity"
+                }
+                Sensor.TYPE_PRESSURE -> {
+                    pressure = "${it.values[0]} hPa"
+                    pressureValue.text = "Pressure: $pressure"
+                }
+                Sensor.TYPE_STEP_DETECTOR -> {
+                    if (it.values[0] == 1.0f) {
+                        stepCount++
+                        numberOfStepTextView.text = "Number of steps: $stepCount"
+                    } else {
+
+                    }
+                }
+                else -> {
+                    Log.d("error","error")
+                }
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+    private fun startSensorUpdates() {
+        temperatureSensor?.let {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+        humiditySensor?.let {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+        pressureSensor?.let {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+        sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)?.also { stepCounter ->
+            sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_UI)
+        }
+    }
+
+    private fun stopSensorUpdates() {
+        sensorManager.unregisterListener(this)
+        Log.d("SensorWeatherTask", "Temperature: $temperature, Humidity: $humidity, Pressure: $pressure")
     }
 
     val CITY: String = "rome,it"
@@ -233,89 +402,41 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            try {
-                val jsonObj = JSONObject(result)
-                val main = jsonObj.getJSONObject("main")
-                val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                val currentTime = sdf.format(Date())
+            result?.let {
+                try {
+                    val jsonObj = JSONObject(it)
+                    val main = jsonObj.getJSONObject("main")
+                    val lastTemp = main.getString("temp")
+                    val lastHumidity = main.getString("humidity")
+                    val lastPressure = main.getString("pressure")
 
-                temperature = main.getString("temp") + "°C"
-                humidity = main.getString("humidity") + "%"
-                pressure = main.getString("pressure") + " hPa"
+                    temperatureValue.text = "Temperature: $lastTemp°C"
+                    humidityValue.text = "Humidity: $lastHumidity%"
+                    pressureValue.text = "Pressure: $lastPressure hPa"
 
-                // Update sensor info views
-                temperatureValue.text = "Temperature: $temperature"
-                humidityValue.text = "Humidity: $humidity"
-                pressureValue.text = "Pressure: $pressure"
-                dateOfMeasurementValue.text = "Date of Measurement: $currentTime"
-
-            } catch (e: Exception) {
-                Log.e("FetchWeatherTask", "Error parsing JSON", e)
-            }
-        }
-    }
-
-
-    private fun startSensorUpdates() {
-        temperatureSensor?.let {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
-        }
-        humiditySensor?.let {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
-        }
-        pressureSensor?.let {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
-        }
-    }
-
-    private fun stopSensorUpdates() {
-        sensorManager.unregisterListener(this)
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
-        event ?: return
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val currentTime = sdf.format(Date())
-        Log.d("SensorData", "Sensor type: ${event.sensor.type}, Values: ${event.values.joinToString()}")
-        runOnUiThread {
-            when (event.sensor.type) {
-                Sensor.TYPE_AMBIENT_TEMPERATURE -> {
-                    temperatureValue.text = "Temperature: ${event.values[0]}°C"
-                }
-                Sensor.TYPE_RELATIVE_HUMIDITY -> {
-                    humidityValue.text = "Humidity: ${event.values[0]}%"
-                }
-                Sensor.TYPE_PRESSURE -> {
-                    pressureValue.text = "Pressure: ${event.values[0]} hPa"
+                    Log.d("FetchWeatherTask", "Temperature: $lastTemp, Humidity: $lastHumidity, Pressure: $lastPressure")
+                } catch (e: Exception) {
+                    Log.e("FetchWeatherTask", "Error parsing weather data", e)
                 }
             }
-            dateOfMeasurementValue.text = "Date of Measurement: $currentTime"
         }
     }
 
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // Non necessario per questo esempio
-    }
-
-
-    private fun updateSensorInfo(location: Location) {
-        latitudeValue.text = "Latitude: ${location.latitude}"
-        longitudeValue.text = "Longitude: ${location.longitude}"
-    }
-
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-        googleMap.uiSettings.isZoomControlsEnabled = true
-        val defaultLocation = LatLng(37.7749, -122.4194)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15f))
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startLocationUpdates()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         mapView.onResume()
         if (isSessionActive) {
-            startLocationUpdates()
             startSensorUpdates()
         }
     }
@@ -324,7 +445,6 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         super.onPause()
         mapView.onPause()
         if (isSessionActive) {
-            stopLocationUpdates()
             stopSensorUpdates()
         }
     }
@@ -332,17 +452,13 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDestroy()
+        if (isSessionActive) {
+            stopSensorUpdates()
+        }
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startLocationUpdates()
-        }
     }
 }
