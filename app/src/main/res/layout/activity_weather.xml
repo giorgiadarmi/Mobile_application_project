@@ -142,7 +142,7 @@
                         android:id="@+id/btn_home"
                         android:layout_width="66dp"
                         android:layout_height="43dp"
-                        android:src="@drawable/ic_home"
+                        android:src="@drawable/home"
                         app:tint="#FFFFFF" />
                     <Space android:layout_width="wrap_content" android:layout_height="5dp"/>
                     <TextView android:id="@+id/back_home" android:layout_width="wrap_content"

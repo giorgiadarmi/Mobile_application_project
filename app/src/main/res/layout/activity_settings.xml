@@ -107,6 +107,7 @@
         android:layout_height="47dp"
         android:contentDescription="@string/home"
         android:src="@drawable/home"
+		android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp"
