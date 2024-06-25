@@ -43,6 +43,21 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.viewFriendSection?.setOnClickListener {
+            val intent = Intent(this, FriendsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.sendWorkoutRequest?.setOnClickListener {
+            val intent = Intent(this, TeamsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.viewMessages?.setOnClickListener {
+            val intent = Intent(this, MessageActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.apply {
             toggle = ActionBarDrawerToggle(this@HomeActivity, drawerLayout, R.string.open, R.string.close)
             drawerLayout.addDrawerListener(toggle)
@@ -77,13 +92,8 @@ class HomeActivity : AppCompatActivity() {
                         val intent = Intent(this@HomeActivity, TrainingActivity::class.java)
                         startActivity(intent)
                     }
-                    R.id.Maps -> {
-                        Toast.makeText(this@HomeActivity, "Maps Item Clicked", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@HomeActivity, TrackingActivity::class.java)
-                        startActivity(intent)
-                    }
-                    R.id.Teams -> {
-                        Toast.makeText(this@HomeActivity, "Teams Item Clicked", Toast.LENGTH_SHORT).show()
+                    R.id.Friends -> {
+                        Toast.makeText(this@HomeActivity, "Friends Item Clicked", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@HomeActivity, FriendsActivity::class.java)
                         startActivity(intent)
                     }

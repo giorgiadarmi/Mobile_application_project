@@ -31,6 +31,12 @@ class SettingsActivity : AppCompatActivity() {
         currentUser = firebaseAuth.currentUser!!
         database = FirebaseDatabase.getInstance().reference
 
+        binding.btnHome?.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
+
         // Initialize Google sign-in client
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))

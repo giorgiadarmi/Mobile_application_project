@@ -16,14 +16,11 @@
         android:id="@+id/Training"
         android:title="Training" />
     <item
-        android:id="@+id/Teams"
-        android:title="Teams" />
-	    <item
+        android:id="@+id/Friends"
+        android:title="Friends" />
+	<item
         android:id="@+id/Messages"
         android:title="Messages" />
-	<item
-        android:id="@+id/Maps"
-        android:title="Maps" />
 	<item
         android:id="@+id/Settings"
         android:title="Settings" />

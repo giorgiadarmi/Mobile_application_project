@@ -1,5 +1,6 @@
 package com.example.mobile_application_project
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
@@ -7,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mobile_application_project.databinding.ActivityWeatherBinding
 import org.json.JSONObject
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -14,13 +16,19 @@ import java.util.Date
 import java.util.Locale
 
 class WeatherActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivityWeatherBinding
     val CITY: String = "rome,it"
     val API: String = "5becb8ce5adefe821f7ac81d7117a28c" // Use API key
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_weather)
+
+        binding = ActivityWeatherBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.btnHome?.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
 
         weatherTask().execute()
 

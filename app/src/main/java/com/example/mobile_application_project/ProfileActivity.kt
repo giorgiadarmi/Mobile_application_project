@@ -48,8 +48,13 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        binding.btnHome?.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
 
-        title = "MyRuns2-TheUserProfile"
+        title = "TheUserProfile"
 
         Util.checkPermissions(this)
         val view: View = findViewById(R.id.info)

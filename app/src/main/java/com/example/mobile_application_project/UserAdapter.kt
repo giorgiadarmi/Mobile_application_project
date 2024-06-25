@@ -37,7 +37,7 @@ class UserAdapter(private val context: Context, private val layoutResId: Int, pr
         ageTextView.text = user.age
 
         inviteButton.setOnClickListener {
-            if (context is FriendsActivity) {
+            if (context is TeamsActivity) {
                 context.sendInvite(user)
             }
         }

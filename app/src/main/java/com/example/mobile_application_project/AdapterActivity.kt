@@ -12,7 +12,7 @@ import com.example.mobile_application_project.ui.Activity
 class AdapterActivity : ListAdapter<Activity, AdapterActivity.ActivityViewHolder>(ActivityDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivityViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_activity, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_session, parent, false)
         return ActivityViewHolder(view)
     }
 

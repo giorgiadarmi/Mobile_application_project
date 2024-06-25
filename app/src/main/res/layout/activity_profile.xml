@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 	android:background="@drawable/home_background"
     android:fillViewport="true">
+	
+	<ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 	
 	<LinearLayout
         android:id="@+id/info"
@@ -55,6 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onChangeButtonClicked"
+				android:textColor="@color/black"
                 android:text="@string/change"
                 tools:ignore="UsingOnClickInXml" />
         </LinearLayout>
@@ -272,6 +278,19 @@
                 android:text="@string/cancel"
                 tools:ignore="UsingOnClickInXml" />
         </LinearLayout>
-
 	</LinearLayout>
 </ScrollView>
+
+    <ImageButton
+        android:id="@+id/btn_home"
+        android:layout_width="40dp"
+        android:layout_height="47dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/home"
+        android:src="@drawable/home" />
+
+</RelativeLayout>

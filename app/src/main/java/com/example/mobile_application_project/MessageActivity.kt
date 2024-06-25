@@ -1,9 +1,11 @@
 package com.example.mobile_application_project
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mobile_application_project.databinding.ActivityMessageBinding
 import com.example.mobile_application_project.ui.Message
 import com.example.mobile_application_project.ui.User
 import com.google.firebase.auth.FirebaseAuth
@@ -14,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class MessageActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivityMessageBinding
     private lateinit var database: DatabaseReference
     private lateinit var messageListView: ListView
     private lateinit var messageList: MutableList<Message>
@@ -22,14 +24,19 @@ class MessageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_message)
-
+        binding = ActivityMessageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         currentUserUsername = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
         messageListView = findViewById(R.id.messageListView)
         messageList = mutableListOf()
 
         fetchCurrentUser()
         fetchMessages()
+
+        binding.btnHome?.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun fetchCurrentUser() {

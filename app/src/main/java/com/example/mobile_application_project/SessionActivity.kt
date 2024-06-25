@@ -1,6 +1,7 @@
 package com.example.mobile_application_project
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -13,12 +14,14 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.mobile_application_project.databinding.ActivitySessionBinding
 import com.example.mobile_application_project.ui.EnvironmentData
 import com.example.mobile_application_project.ui.Session
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -38,6 +41,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import org.json.JSONObject
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
 import java.net.URL
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -45,6 +50,7 @@ import java.util.Date
 import java.util.Locale
 class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListener {
     private lateinit var database: DatabaseReference
+    private lateinit var sessionNameInput: EditText
     private lateinit var sessionTypeSpinner: Spinner
     private lateinit var startButton: Button
     private lateinit var stopButton: Button
@@ -71,10 +77,12 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     private var startTime: Long = 0
     private lateinit var lastLocation: Location
 
-    private var sessionId = 0
     private lateinit var sessionStartDate: String
     private lateinit var sessionEndDate: String
     private var isSessionActive = false
+
+    private val username = FirebaseAuth.getInstance().currentUser?.displayName
+
 
     private val sessionTypes = arrayOf(
         "Outdoor Running", "Indoor Running", "Gym", "Calisthenics",
@@ -88,11 +96,13 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     private var temperatureSensor: Sensor? = null
     private var humiditySensor: Sensor? = null
     private var pressureSensor: Sensor? = null
-
+    private lateinit var binding: ActivitySessionBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_session)
+        binding = ActivitySessionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         database = FirebaseDatabase.getInstance().reference
+        sessionNameInput = findViewById(R.id.session_name_input)
         sessionTypeSpinner = findViewById(R.id.session_type_spinner)
         startButton = findViewById(R.id.start_button)
         stopButton = findViewById(R.id.stop_button)
@@ -122,6 +132,11 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+
+        binding.btnHome?.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
 
         sessionTypeSpinner.adapter = ArrayAdapter(
             this,
@@ -164,22 +179,20 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     }
 
     private fun startSession() {
-        sessionId++
         sessionStartDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
         isSessionActive = true
         stepCount = 0
         totalDistance = 0.0
         startTime = System.currentTimeMillis()
 
+        val sessionNameInput = sessionNameInput.text.toString().trim()
         val selectedSessionType = sessionTypeSpinner.selectedItem.toString()
         sessionInfo.text = """
-            ID: $sessionId
-            Name: ${selectedSessionType}
+            Name: $sessionNameInput
             Date of Creation: $sessionStartDate
             Date of End:
             Active: Yes
-            Creator ID: 1
-            Creator: User
+            Creator: $username
             Session Type: $selectedSessionType
         """.trimIndent()
         sessionInfo.visibility = View.VISIBLE
@@ -203,9 +216,10 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         stopSensorUpdates()
         FetchWeatherTask().execute()
 
-        val temperature = temperatureValue.text.toString().removePrefix("Temperature: ").removeSuffix("°C")
-        val humidity = humidityValue.text.toString().removePrefix("Humidity: ").removeSuffix("%")
-        val pressure = pressureValue.text.toString().removePrefix("Pressure: ").removeSuffix("hPa")
+        val sessionName = sessionNameInput.text.toString().trim()
+        val temperature = temperatureValue.text.toString().removePrefix("Temperature: ").removeSuffix("°C").toFloat()
+        val humidity = humidityValue.text.toString().removePrefix("Humidity: ").removeSuffix("%").toFloat()
+        val pressure = pressureValue.text.toString().removePrefix("Pressure: ").removeSuffix("hPa").toFloat()
 
         val elapsedTime = (System.currentTimeMillis() - startTime) / 1000.0
         val distanceInKm = totalDistance / 1000.0
@@ -215,34 +229,150 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         averagePaceTextView.text = "Average pace: $formattedPace km/h"
 
         Log.d("SensorData", "Temperature: $temperature, Humidity: $humidity, Pressure: $pressure")
-        val environmentDataList = mutableListOf<EnvironmentData>()
-        environmentDataList.add(
-            EnvironmentData(
-                temperature = temperature,
-                humidity = humidity,
-                pressure = pressure,
-                latitude = lastLocation.latitude,
-                longitude = lastLocation.longitude,
-                date_of_measurement = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-            )
+
+        val environment = EnvironmentData(
+            temperature = temperature,
+            humidity = humidity,
+            pressure = pressure,
+            latitude = lastLocation.latitude,
+            longitude = lastLocation.longitude,
+            date_of_measurement = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
         )
 
         val session = Session(
-            name = sessionTypeSpinner.selectedItem.toString(),
+            id = 0,
+            name = sessionName,
             date_of_creation = sessionStartDate,
             date_of_end = sessionEndDate,
             active = false,
             creator_id = FirebaseAuth.getInstance().currentUser?.uid ?: "",
-            creator = FirebaseAuth.getInstance().currentUser?.displayName ?: "User",
             avgSpeed = averagePace,
             number_of_step = stepCount,
             totalDistance = totalDistance,
-            environment_data = environmentDataList,
             session_type = sessionTypeSpinner.selectedItem.toString(),
-            session_type_id = sessionTypeSpinner.selectedItemPosition + 1
+            session_type_id = sessionTypeSpinner.selectedItemPosition
         )
 
+        val sessionData = JSONObject().apply {
+            put("name", session.name)
+            put("date_of_creation", session.date_of_creation)
+            put("date_of_end", session.date_of_end)
+            put("active", session.active)
+            put("avgSpeed", session.avgSpeed)
+            put("number_of_step", session.number_of_step)
+            put("totalDistance", session.totalDistance)
+            put("session_type_id", session.session_type_id)
+        }
+
+        val environmentData = JSONObject().apply {
+            put("temperature", environment.temperature)
+            put("humidity", environment.humidity)
+            put("pressure", environment.pressure)
+            put("latitude", environment.latitude)
+            put("longitude", environment.longitude)
+            put("date_of_measurement", environment.date_of_measurement)
+        }
+
+        Log.d("EnvironmentData", "Session Data JSON: $environmentData")
+        Log.d("SessionActivity", "Session Data JSON: $sessionData")
+
         sendSessionData(session)
+    }
+
+    private fun sendSessionToServer(session: Session, environment: EnvironmentData) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        val sessionData = JSONObject().apply {
+            put("name", session.name)
+            put("date_of_creation", session.date_of_creation)
+            put("date_of_end", session.date_of_end)
+            put("active", session.active)
+            put("avgSpeed", session.avgSpeed)
+            put("number_of_step", session.number_of_step)
+            put("totalDistance", session.totalDistance)
+            put("session_type_id", session.session_type_id)
+        }
+
+        val environmentData = JSONObject().apply {
+            put("temperature", environment.temperature)
+            put("humidity", environment.humidity)
+            put("pressure", environment.pressure)
+            put("latitude", environment.latitude)
+            put("longitude", environment.longitude)
+            put("date_of_measurement", environment.date_of_measurement)
+        }
+
+        val url = "http://indirizzoserver/user/$uid/session"
+        val sessionServerTask = object : AsyncTask<Void, Void, JSONObject>() {
+            override fun doInBackground(vararg params: Void?): JSONObject? {
+                var result: JSONObject? = null
+                try {
+                    result = makePostRequest(url, sessionData.toString())
+                } catch (e: Exception) {
+                    Log.e("SessionActivity", "Error sending session data to server", e)
+                }
+                return result
+            }
+
+            override fun onPostExecute(result: JSONObject?) {
+                result?.let {
+                    val sessionId = it.getString("id")
+                    sendEnvironmentDataToServer(sessionId, environmentData)
+                }
+            }
+        }
+        sessionServerTask.execute()
+    }
+
+    private fun sendEnvironmentDataToServer(sessionId: String, environmentData: JSONObject) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        val url = "http://indirizzoserver/user/$uid/sessions/$sessionId/environmentdata"
+        val environmentServerTask = object : AsyncTask<Void, Void, Boolean>() {
+            override fun doInBackground(vararg params: Void?): Boolean {
+                try {
+                    makePostRequest(url, environmentData.toString())
+                    return true
+                } catch (e: Exception) {
+                    Log.e("SessionActivity", "Error sending environment data to server", e)
+                }
+                return false
+            }
+
+            override fun onPostExecute(result: Boolean) {
+                if (result) {
+                    Log.d("SessionActivity", "Environment data sent successfully")
+                }
+            }
+        }
+        environmentServerTask.execute()
+    }
+
+    private fun makePostRequest(urlString: String, jsonBody: String): JSONObject {
+        val url = URL(urlString)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "POST"
+        connection.setRequestProperty("Content-Type", "application/json;charset=utf-8")
+        connection.setRequestProperty("Accept", "application/json")
+        connection.doOutput = true
+
+        try {
+            val wr = OutputStreamWriter(connection.outputStream)
+            wr.write(jsonBody)
+            wr.flush()
+
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val inputStream = connection.inputStream.bufferedReader().use {
+                    it.readText()
+                }
+                return JSONObject(inputStream)
+            } else {
+                throw Exception("HTTP error code: $responseCode")
+            }
+        } finally {
+            connection.disconnect()
+        }
     }
 
     private fun sendSessionData(session: Session) {

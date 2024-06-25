@@ -3,16 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/home_background"
     tools:context=".SessionActivity">
+
+    <!-- Titolo della sessione di allenamento -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Workout session"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Campo di testo per inserire il nome della sessione -->
+    <EditText
+        android:id="@+id/session_name_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_centerHorizontal="true"
+        android:hint="Enter Session Name"
+        android:layout_marginTop="16dp" />
 
     <!-- Spinner per selezionare il tipo di sessione -->
     <Spinner
         android:id="@+id/session_type_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+        android:layout_below="@id/session_name_input"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true" />
 
     <!-- Pulsante di avvio sessione -->
     <Button
@@ -135,4 +158,18 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <!-- Pulsante home -->
+    <ImageButton
+        android:id="@+id/btn_home"
+        android:layout_width="40dp"
+        android:layout_height="47dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/home"
+        android:src="@drawable/home" />
+
 </RelativeLayout>
