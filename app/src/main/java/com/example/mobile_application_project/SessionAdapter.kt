@@ -30,7 +30,8 @@ class SessionsAdapter : RecyclerView.Adapter<SessionsAdapter.SessionViewHolder>(
 
     override fun onBindViewHolder(holder: SessionViewHolder, position: Int) {
         val session = sessions[position]
-        holder.bind(session, environmentDataMap[session.id])
+        val environmentData = environmentDataMap[session.id]
+        holder.bind(session, environmentData)
     }
 
     override fun getItemCount(): Int {
@@ -42,13 +43,42 @@ class SessionsAdapter : RecyclerView.Adapter<SessionsAdapter.SessionViewHolder>(
         private val sessionNameTextView: TextView = itemView.findViewById(R.id.sessionNameTextView)
         private val sessionDetailsTextView: TextView = itemView.findViewById(R.id.sessionDetailsTextView)
         private val environmentDataTextView: TextView = itemView.findViewById(R.id.environmentDataTextView)
+        private val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
+        private val stepsTextView: TextView = itemView.findViewById(R.id.stepsTextView)
+        private val distanceTextView: TextView = itemView.findViewById(R.id.distanceTextView)
+        private val paceTextView: TextView = itemView.findViewById(R.id.paceTextView)
 
         fun bind(session: Session, environmentData: EnvironmentData?) {
             sessionNameTextView.text = session.name
-            sessionDetailsTextView.text = "Date of Creation: ${session.date_of_creation}, Active: ${if (session.active) "Yes" else "No"}, Session Type: ${session.session_type}"
+            sessionDetailsTextView.text = getSessionDetails(session)
+            setEnvironmentData(environmentData)
+        }
 
+        private fun getSessionDetails(session: Session): String {
+            val sessionType = when (session.session_type_id) {
+                1 -> "Outdoor Running"
+                2 -> "Indoor Running"
+                3 -> "Gym"
+                4 -> "Calisthenics"
+                5 -> "Outdoor Training"
+                6 -> "Swimming"
+                else -> "Unknown Activity"
+            }
+
+            return "Type of Activity: $sessionType\n" +
+                    "Date of Creation: ${session.date_of_creation}\n" +
+                    "Active: ${if (session.active) "Yes" else "No"}"
+        }
+
+        private fun setEnvironmentData(environmentData: EnvironmentData?) {
             if (environmentData != null) {
-                environmentDataTextView.text = "Temperature: ${environmentData.temperature}, Humidity: ${environmentData.humidity}, Pressure: ${environmentData.pressure}, Latitude: ${environmentData.latitude}, Longitude: ${environmentData.longitude}, Date of Measurement: ${environmentData.date_of_measurement}"
+                environmentDataTextView.text = "Environment Data:\n" +
+                        "Temperature: ${environmentData.temperature}\n" +
+                        "Humidity: ${environmentData.humidity}\n" +
+                        "Pressure: ${environmentData.pressure}\n" +
+                        "Latitude: ${environmentData.latitude}\n" +
+                        "Longitude: ${environmentData.longitude}\n" +
+                        "Date of Measurement: ${environmentData.date_of_measurement}"
             } else {
                 environmentDataTextView.text = "No environment data available"
             }

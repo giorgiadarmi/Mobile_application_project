@@ -6,18 +6,10 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/messageTextView"
+        android:id="@+id/friendRequestTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/responseTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Response:"
-        android:textSize="14sp"
         android:textColor="@android:color/black" />
 
     <LinearLayout
@@ -26,15 +18,17 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/respondYesButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yes" />
+            android:id="@+id/acceptButton"
+            android:layout_width="69dp"
+            android:layout_height="69dp"
+            android:textColor="@color/green"
+            android:text="Accept" />
 
         <Button
-            android:id="@+id/respondNoButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No" />
+            android:id="@+id/rejectButton"
+            android:layout_width="69dp"
+            android:layout_height="69dp"
+            android:textColor="@color/red"
+            android:text="Reject" />
     </LinearLayout>
 </LinearLayout>

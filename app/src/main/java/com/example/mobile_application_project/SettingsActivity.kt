@@ -2,7 +2,9 @@ package com.example.mobile_application_project
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.mobile_application_project.databinding.ActivitySettingsBinding
@@ -13,6 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
@@ -119,18 +124,64 @@ class SettingsActivity : AppCompatActivity() {
 
                         databaseRef.removeValue()
                             .addOnSuccessListener {
-                                val intent = Intent(this, LoginActivity::class.java)
-                                startActivity(intent)
-                                finish()
+                                // Delete account on the server
+                                deleteUserFromServer(userId)
                             }
                             .addOnFailureListener { e ->
+                                Log.e("SettingsActivity", "Failed to delete account from Firebase", e)
                             }
                     }
                 } else {
-
+                    Log.e("SettingsActivity", "Failed to sign out from Google", task.exception)
                 }
             }
     }
+
+    private fun deleteUserFromServer(userId: String) {
+        val url = "https://voidmelon.pythonanywhere.com/user/$userId"
+        val deleteTask = object : AsyncTask<Void, Void, Boolean>() {
+            override fun doInBackground(vararg params: Void?): Boolean {
+                try {
+                    makeDeleteRequest(url)
+                    return true
+                } catch (e: Exception) {
+                    Log.e("SettingsActivity", "Error deleting account from server", e)
+                }
+                return false
+            }
+
+            override fun onPostExecute(result: Boolean) {
+                if (result) {
+                    val intent = Intent(this@SettingsActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // Handle failure
+                }
+            }
+        }
+        deleteTask.execute()
+    }
+
+    private fun makeDeleteRequest(urlString: String) {
+        val url = URL(urlString)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "DELETE"
+        connection.setRequestProperty("Content-Type", "application/json;charset=utf-8")
+        connection.setRequestProperty("Accept", "application/json")
+
+        try {
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
+                Log.d("SettingsActivity", "Account deleted from server successfully")
+            } else {
+                throw Exception("HTTP error code: $responseCode")
+            }
+        } finally {
+            connection.disconnect()
+        }
+    }
+
     private fun sendPasswordResetEmail() {
         // Example implementation to send reset password email to current user's email
         firebaseAuth.sendPasswordResetEmail(currentUser.email!!)

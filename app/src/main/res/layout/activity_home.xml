@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Header Section -->
+
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
                 android:textColor="@android:color/white"
-                android:text="Welcome in fitness app" />
+                android:text="Welcome in Fitness Team Monitor app" />
 
         </LinearLayout>
 

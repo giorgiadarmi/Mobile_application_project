@@ -11,6 +11,7 @@ interface ApiService {
     @GET("user/{userId}/allsessions")
     fun getAllSessions(@Path("userId") userId: String): Call<List<Session>>
 
-    @GET("users/{userId}/sessions/{sessionId}/environmentdatas")
+    @GET("user/{userId}/sessions/{sessionId}/environmentdatas")
     fun getEnvironmentData(@Path("userId") userId: String, @Path("sessionId") sessionId: Int): Call<List<EnvironmentData>>
+
 }

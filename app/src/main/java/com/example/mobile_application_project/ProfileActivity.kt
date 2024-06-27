@@ -25,8 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.example.mobile_application_project.databinding.ActivityProfileBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.io.FileOutputStream
@@ -48,7 +47,7 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         binding.btnHome?.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
@@ -61,6 +60,7 @@ class ProfileActivity : AppCompatActivity() {
         onLoad(view)
 
         imageView = findViewById(R.id.imageProfile)
+
 
         val tempImgFile = File(getExternalFilesDir(null), tempImgFileName)
         val imgFile = File(getExternalFilesDir(null), imgFileName)
@@ -95,6 +95,8 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+
+
     fun onChangeButtonClicked(view: View) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Pick Profile Picture")
@@ -128,11 +130,16 @@ class ProfileActivity : AppCompatActivity() {
         val age = binding.editMessageAge.text.toString()
         val username = binding.editMessageUsername.text.toString()
 
-        updateData(name, surname, email, age, username)
-
-        editor.apply()
-        Toast.makeText(applicationContext, "Saved", Toast.LENGTH_SHORT).show()
-        finish()
+        checkUsernameAvailability(username) { isAvailable ->
+            if (isAvailable) {
+                updateData(name, surname, email, age, username)
+                editor.apply()
+                Toast.makeText(applicationContext, "Saved", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(applicationContext, "Username is already taken", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun updateData(name: String, surname: String, email: String, age: String, username: String) {
@@ -157,6 +164,21 @@ class ProfileActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to Update", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun checkUsernameAvailability(username: String, callback: (Boolean) -> Unit) {
+        database = FirebaseDatabase.getInstance().getReference("Users")
+        val query: Query = database.orderByChild("username").equalTo(username)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                callback(!snapshot.exists())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@ProfileActivity, error.message, Toast.LENGTH_SHORT).show()
+                callback(false)
+            }
+        })
     }
 
     fun onCancelButtonClicked(view: View) {

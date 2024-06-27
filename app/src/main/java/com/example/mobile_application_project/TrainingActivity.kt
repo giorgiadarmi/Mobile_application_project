@@ -16,7 +16,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class TrainingActivity : AppCompatActivity() {
 
     private lateinit var retrofit: Retrofit
@@ -30,7 +29,6 @@ class TrainingActivity : AppCompatActivity() {
         binding = ActivityTrainingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         binding.startNewTrainingButton?.setOnClickListener {
             val intent = Intent(this, SessionActivity::class.java)
             startActivity(intent)
@@ -42,20 +40,20 @@ class TrainingActivity : AppCompatActivity() {
         }
 
         recyclerView = binding.recyclerView
-        // Inizializzazione Retrofit
+        // Initialize Retrofit
         retrofit = Retrofit.Builder()
-            .baseUrl("http://indirizzoserver/")
+            .baseUrl("https://voidmelon.pythonanywhere.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         apiService = retrofit.create(ApiService::class.java)
 
-        // Inizializzazione RecyclerView e Adapter
+        // Initialize RecyclerView and Adapter
         sessionsAdapter = SessionsAdapter()
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = sessionsAdapter
 
-        // Eseguire la chiamata API per ottenere tutte le sessioni dell'utente
+        // Fetch all user sessions
         val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
         getAllSessions(userId)
     }
@@ -67,22 +65,19 @@ class TrainingActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val sessions = response.body()
                     sessions?.let {
-                        // Aggiungi le sessioni ricevute all'adapter per la visualizzazione
                         sessionsAdapter.setSessions(it)
-
-                        // Mostra i dati ambientali per la prima sessione (se presente)
-                        if (it.isNotEmpty()) {
-                            val firstSession = it[0]
-                            getEnvironmentData(userId, firstSession.id)
+                        // Fetch environmental data for each session
+                        it.forEach { session ->
+                            getEnvironmentData(userId, session.id)
                         }
                     }
                 } else {
-                    Log.e(TAG, "Errore durante la chiamata API: ${response.code()}")
+                    Log.e(TAG, "Error during API call: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<List<Session>>, t: Throwable) {
-                Log.e(TAG, "Errore durante la chiamata API", t)
+                Log.e(TAG, "Error during API call", t)
             }
         })
     }
@@ -94,19 +89,17 @@ class TrainingActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val environmentData = response.body()
                     environmentData?.let {
-                        // Mostra i dati ambientali nella sessione corrispondente
                         if (it.isNotEmpty()) {
-                            val environment = it[0]
-                            sessionsAdapter.setEnvironmentData(sessionId, environment)
+                            sessionsAdapter.setEnvironmentData(sessionId, it[0])
                         }
                     }
                 } else {
-                    Log.e(TAG, "Errore durante la chiamata API: ${response.code()}")
+                    Log.e(TAG, "Error during API call: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<List<EnvironmentData>>, t: Throwable) {
-                Log.e(TAG, "Errore durante la chiamata API", t)
+                Log.e(TAG, "Error during API call", t)
             }
         })
     }

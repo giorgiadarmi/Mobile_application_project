@@ -250,7 +250,7 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
             number_of_step = stepCount,
             totalDistance = totalDistance,
             session_type = sessionTypeSpinner.selectedItem.toString(),
-            session_type_id = sessionTypeSpinner.selectedItemPosition
+            session_type_id = sessionTypeSpinner.selectedItemPosition + 1
         )
 
         val sessionData = JSONObject().apply {
@@ -276,7 +276,7 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
         Log.d("EnvironmentData", "Session Data JSON: $environmentData")
         Log.d("SessionActivity", "Session Data JSON: $sessionData")
 
-        sendSessionData(session)
+        sendSessionToServer(session, environment)
     }
 
     private fun sendSessionToServer(session: Session, environment: EnvironmentData) {
@@ -302,7 +302,7 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
             put("date_of_measurement", environment.date_of_measurement)
         }
 
-        val url = "http://indirizzoserver/user/$uid/session"
+        val url = "https://voidmelon.pythonanywhere.com/user/$uid/session"
         val sessionServerTask = object : AsyncTask<Void, Void, JSONObject>() {
             override fun doInBackground(vararg params: Void?): JSONObject? {
                 var result: JSONObject? = null
@@ -327,7 +327,7 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     private fun sendEnvironmentDataToServer(sessionId: String, environmentData: JSONObject) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-        val url = "http://indirizzoserver/user/$uid/sessions/$sessionId/environmentdata"
+        val url = " https://voidmelon.pythonanywhere.com/user/$uid/sessions/$sessionId/environmentdata"
         val environmentServerTask = object : AsyncTask<Void, Void, Boolean>() {
             override fun doInBackground(vararg params: Void?): Boolean {
                 try {
@@ -362,7 +362,7 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
             wr.flush()
 
             val responseCode = connection.responseCode
-            if (responseCode == HttpURLConnection.HTTP_OK) {
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
                 val inputStream = connection.inputStream.bufferedReader().use {
                     it.readText()
                 }

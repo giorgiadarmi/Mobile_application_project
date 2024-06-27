@@ -95,6 +95,7 @@ class TeamsActivity : AppCompatActivity() {
                 val messageRef = FirebaseDatabase.getInstance().getReference("Messages").push()
                 val message = Message(
                     id = messageRef.key, // Imposta l'ID del messaggio
+                    type = "workout",
                     user_send = currentUserUsername,
                     user_recv = receiver.username,
                     text = text,

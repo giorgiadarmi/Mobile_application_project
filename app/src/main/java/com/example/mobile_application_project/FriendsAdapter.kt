@@ -9,13 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile_application_project.ui.Friend
 
 class FriendsAdapter(private val friends: MutableList<Friend>, private val onDelete: (Friend) -> Unit) : RecyclerView.Adapter<FriendsAdapter.FriendViewHolder>() {
-
     inner class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val usernameTextView: TextView = itemView.findViewById(R.id.usernameTextView)
         val deleteButton: ImageButton = itemView.findViewById(R.id.deleteButton)
 
         fun bind(friend: Friend) {
-            usernameTextView.text = friend.username
+            usernameTextView.text = "${friend.name} ${friend.surname} (${friend.email})"
             deleteButton.setOnClickListener { onDelete(friend) }
         }
     }
