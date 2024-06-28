@@ -39,7 +39,6 @@
     <string name="cancel">cancel</string>
     <string name="settings">settings</string>
     <string name="settings_preference_key">SETTINGS_PREFERENCE_KEY</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="this_is_start">this is start</string>
     <string name="this_is_settings">this is settings</string>
@@ -58,7 +57,6 @@
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
 
-    <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
@@ -79,7 +77,6 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="map_loading">map loading...</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="button_start_tracking">Start Tacking</string>
