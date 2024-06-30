@@ -16,8 +16,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -128,14 +131,38 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnCompleteListener
-                sendUserDataToFirebase(user, uid)
-                checkUserInServerAndSendData(user, uid)
+                checkUserInFirebaseAndProceed(user, uid)
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, task.toString(), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun checkUserInFirebaseAndProceed(user: User, uid: String) {
+        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Users").child(uid)
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // User already exists, do not overwrite
+                    Log.d("LoginActivity", "User already exists in Firebase")
+                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    // User does not exist, proceed with data saving
+                    sendUserDataToFirebase(user, uid)
+                    checkUserInServerAndSendData(user, uid)
+                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("LoginActivity", "Database error: ${databaseError.message}")
+                Toast.makeText(this@LoginActivity, "Database error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun sendUserDataToFirebase(user: User, uid: String) {
