@@ -38,8 +38,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -81,7 +84,8 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
     private lateinit var sessionEndDate: String
     private var isSessionActive = false
 
-    private val username = FirebaseAuth.getInstance().currentUser?.displayName
+    private var username: String? = null
+    //private var username = FirebaseAuth.getInstance().currentUser?.displayName
 
 
     private val sessionTypes = arrayOf(
@@ -176,6 +180,23 @@ class SessionActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventList
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 1)
         }
+
+        fetchUsername()
+    }
+
+    private fun fetchUsername() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val userRef = database.child("Users").child(userId).child("username")
+
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                username = snapshot.getValue(String::class.java)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("SessionActivity", "Error fetching username", error.toException())
+            }
+        })
     }
 
     private fun startSession() {
