@@ -34,7 +34,7 @@ Nav Menu
 Profile section
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/ed44afa3-a82c-4fe0-b9b6-b92e820e5347)
 Monitoring section
-![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/b99a3c17-4f43-4b5a-a531-14b1954526f7)
+![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/2ad50ba7-c941-4d75-88be-aa560b412add)
 Friend section
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/b592f842-7cea-4db7-bb30-a44f4e541aae)
 Message section
