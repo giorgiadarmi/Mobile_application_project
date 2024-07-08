@@ -13,6 +13,6 @@ A mobile app that permit to monitor the workout and find workout friends
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/cb50873e-6e88-4473-998a-55e7750fadc9)
 
 ## Technologies
-![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/1ed7a87a-80eb-4dd6-b78a-9ceb9e8fd932)
+![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/73a6e4be-a010-452a-92bb-a48a06c34369)
 
 ## Funtionalities
