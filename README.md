@@ -16,3 +16,12 @@ A mobile app that permit to monitor the workout and find workout friends
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/73a6e4be-a010-452a-92bb-a48a06c34369)
 
 ## Funtionalities
+<ul>
+<li>Authentication</li>
+<li>Sensor</li>
+<li>Weather section</li>
+<li>Monitoring</li>
+<li>Friends section</li>
+<li>Messages section</li>
+<li>Settings</li>
+</ul>
