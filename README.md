@@ -31,10 +31,12 @@ Home
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/da82b8a9-12a2-46fc-91cf-1414160bbd92)
 Nav Menu
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/da06cbae-b69d-4cbe-9c05-513dcd15ab5f)
+<br>
 Profile section
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/ed44afa3-a82c-4fe0-b9b6-b92e820e5347)
 Monitoring section
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/2ad50ba7-c941-4d75-88be-aa560b412add)
+<br>
 Friend section
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/b592f842-7cea-4db7-bb30-a44f4e541aae)
 Message section
