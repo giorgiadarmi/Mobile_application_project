@@ -7,6 +7,7 @@ A mobile app that permit to monitor the workout and find workout friends
 
 
 ## Icon
+<img src="[https://github.com/giorgiadarmi/easyhome/blob/master/icon.png](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/fbc1394f-fc22-418a-9b6d-2a6c451d87db)" width="78">
 ![image](https://github.com/giorgiadarmi/Mobile_application_project/assets/95757658/fbc1394f-fc22-418a-9b6d-2a6c451d87db)
 
 ## Project architecture
