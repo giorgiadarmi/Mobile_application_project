@@ -1,7 +1,7 @@
 # Fitness Team Monitor App
 Project Mobile Application and Cloud Computing
 <br>
-La Sapienza University of Rome
+CyberSecuirty Course, La Sapienza University of Rome
 
 ## Description
 A mobile app that permit to monitor the workout and find workout friends
